@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA_Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <h1 style="display : flex; justify-content: center;">Barbuta Translate</h1>
+    <div>
+        <form action = "#" method="POST">
+            <div class = "Lang">
+                <select name="firstLang" id="firstLang">
+                    {% for item in languages %}
+                        <option value="{{item}}"> {{item}} </option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="firstWord"/>
+
+            </div>
+            <div class = "Lang">
+                <select name="secondLang" id="secondLang">
+                    {% for item in languages %}
+                        <option value="{{item}}"> {{item}} </option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="secondWord"/>
+                
+            </div>
+            <input type="submit" value="submit">
+        </form>
+    </div>
+
+    <div style="display : flex; justify-content: center; flex-direction: column;">
+
+        <h2 style = "display : flex; justify-content: center;">Last Words Added</h2>
+        {% for item in lastWords %}
+
+        <div style = "display: flex; justify-content: center; flex-direction: row;">
+            <div style = "padding: 10px;">
+                <p>{{item.0}}</p>
+                <p>{{item.1}}</p>
+            </div>
+
+            <div style = "padding: 10px;">
+                <p>{{item.2}}</p>
+                <p>{{item.3}}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

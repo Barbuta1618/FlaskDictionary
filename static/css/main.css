@@ -1,0 +1,16 @@
+body {
+    margin : 0;
+    font-family : sans-serif;
+    display: flex;
+    flex-direction: column 
+}
+
+form {
+    display: flex;
+    justify-content: center;
+}
+
+.Lang {
+    display: flex;
+    flex-direction: column;
+}
