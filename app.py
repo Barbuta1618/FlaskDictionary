@@ -19,6 +19,7 @@ def getLanguages():
     with open("languages.txt", "r") as input:
         return input.read().split("\n")
 
+
 languages = getLanguages()
 
 
@@ -26,6 +27,7 @@ lastWords = []
 
 # database connection
 db = DataBase.DataBase((DATABASE, USER, PASSWORD, HOST, PORT))
+db.deleteAll()
 
 @app.route('/', methods = ['GET', 'POST'])
 def index():
@@ -40,8 +42,9 @@ def index():
         # getting the data from the user
         lst = [request.form['firstWord'], request.form['firstLang'], request.form['secondWord'], request.form['secondLang']]
         
-        db.insert(lst)
-        lastWords.append(lst)
+        if db.checkData(lst) == 0:
+            db.insert(lst)
+            lastWords.append(lst)
 
         return render_template('index.html', languages = languages, lastWords = lastWords)
 

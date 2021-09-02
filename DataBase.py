@@ -7,8 +7,27 @@ class DataBase():
 
         self.cursor.execute("CREATE TABLE IF NOT EXISTS dictionary (word1 TEXT, lang1 TEXT, word2 TEXT, lang2 TEXT)")
 
+
+    def checkData(self, data):
+
+        for item in data:
+            if not item.isalpha():
+                return 1
+
+        command = "SELECT * FROM dictionary WHERE word1 = '{}' AND lang1 = '{}' AND word2 = '{}' AND lang2 = '{}';"
+        self.cursor.execute(command.format(data[0], data[1], data[2], data[3]))
+
+        result = self.cursor.fetchall()
+        if len(result) != 0:
+            return 2
+        
+        return 0
     
     def insert(self, data):
         command = "INSERT INTO dictionary VALUES ('{}', '{}', '{}', '{}')"
         self.cursor.execute(command.format(data[0], data[1], data[2], data[3]))
+        self.connection.commit()
+
+    def deleteAll(self):
+        self.cursor.execute("DELETE FROM dictionary")
         self.connection.commit()
