@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="topnav">
+    <a href="/">Insert</a>
+    <a class="active" href="/search">Search</a>
+    
+</div>
+
+<h1 style="text-align: center;">Search Word</h1>
+
+<form action = "" method="POST">
+    <div class="Lang">
+        <select name="language1">
+            {% for item in languages %}
+                <option value="{{item}}"> {{item}} </option>
+            {% endfor %}
+        </select>
+        <input type="text" name="word">
+    </div>
+    <div>
+        <select name="language2">
+            {% for item in languages %}
+                <option value="{{item}}"> {{item}} </option>
+            {% endfor %}
+        </select>
+        
+    </div>
+    <input type="submit" value="Search">
+</form>
+<p>{{result}}</p>
+
+
+{% endblock %}

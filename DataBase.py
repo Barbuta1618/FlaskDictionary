@@ -28,6 +28,7 @@ class DataBase():
         self.cursor.execute(command.format(data[0], data[1], data[2], data[3]))
         self.connection.commit()
 
-    def deleteAll(self):
-        self.cursor.execute("DELETE FROM dictionary")
-        self.connection.commit()
+    def searchWord(self, lst):
+        command = "SELECT * FROM dictionary WHERE (word1 = '{}' AND lang1 = '{}' AND lang2 = '{}') OR (word2 = '{}' AND lang2 = '{}' AND lang1 = '{}')" 
+        self.cursor.execute(command.format(lst[0], lst[1], lst[2], lst[0], lst[1], lst[2]))
+        return self.cursor.fetchall()
