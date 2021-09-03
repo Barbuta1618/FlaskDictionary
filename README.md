@@ -2,7 +2,7 @@ FIRST STEPS AFTER CLONE REPOSITORY
 
 1. Create ".env" file having this structure:
 
-    DATABASE=database_name  
+    DATABASE=database_name
     DB_USER=database_user
     HOST=database_host
     PASSWORD=user_password
