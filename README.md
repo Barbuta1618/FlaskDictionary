@@ -1,6 +1,6 @@
 FIRST STEPS AFTER CLONE REPOSITORY
 
-1. Create ".env" file having this structure:
+1. Please complete the "env" file then rename it to ".env"
 
     DATABASE=database_name
     DB_USER=database_user
