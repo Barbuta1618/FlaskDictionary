@@ -34,3 +34,9 @@ form {
     color: black;
     font-size: 18px;
 }
+
+.result{
+    display: flex; 
+    justify-content: center; 
+    flex-direction: row;
+}

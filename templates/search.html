@@ -29,7 +29,21 @@
     </div>
     <input type="submit" value="Search">
 </form>
-<p>{{result}}</p>
 
+<h2 style="text-align: center;">Results</h2>
+
+<div class="result">
+    {% for item in result%}
+        <div style = "padding: 10px;">
+            <p>{{item.0}}</p>
+            <p>{{item.1}}</p>
+        </div>
+
+        <div style = "padding: 10px;">
+            <p>{{item.2}}</p>
+            <p>{{item.3}}</p>
+        </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
