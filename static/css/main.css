@@ -40,3 +40,7 @@ form {
     justify-content: center; 
     flex-direction: row;
 }
+
+.flashes{
+    background-color: brown;
+}

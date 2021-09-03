@@ -2,10 +2,14 @@ import psycopg2
 
 class DataBase():
     def __init__(self, database):
-        self.connection = psycopg2.connect(database = database[0], user = database[1], password = database[2], host = database[3], port = database[4])
-        self.cursor = self.connection.cursor()
 
-        self.cursor.execute("CREATE TABLE IF NOT EXISTS dictionary (word1 TEXT, lang1 TEXT, word2 TEXT, lang2 TEXT)")
+        try:
+            self.connection = psycopg2.connect(database = database[0], user = database[1], password = database[2], host = database[3], port = database[4])
+            self.cursor = self.connection.cursor()
+
+            self.cursor.execute("CREATE TABLE IF NOT EXISTS dictionary (word1 TEXT, lang1 TEXT, word2 TEXT, lang2 TEXT)")
+        except:
+            raise TypeError("Connection with database cannot be established!")
 
 
     def checkData(self, data):
