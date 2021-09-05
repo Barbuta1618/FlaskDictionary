@@ -46,3 +46,7 @@ form {
 .flashes{
     background-color: brown;
 }
+
+.update{
+    background-color: green;
+}

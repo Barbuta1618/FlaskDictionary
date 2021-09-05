@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    <div class="topnav">
+        <a href="/">Insert</a>
+        <a href="/search">Search</a>
+        <a href="/dictionary">Dictionary</a>
+        <a href="/update">Update</a>
+        <a class="active" href="/delete">Delete</a>
+    </div>
+
+    <h1 style="text-align: center;">Delete Language</h1>
+
+    <form style="display: flex; justify-content: center;" action = "" method="POST">
+        <div style="flex-direction: column;">
+            <div class="Lang">
+                <p>Please select the language: </p>
+                <input  type="text" name="language" list="languages">
+                <input type="submit" value="DELETE">
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

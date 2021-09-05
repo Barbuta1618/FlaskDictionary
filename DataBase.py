@@ -72,7 +72,6 @@ class DataBase():
             """
         self.cursor.execute(command.format(self.words_table, data[0], data[1], data[2], data[3]))
 
-        result = self.cursor.fetchall()
         if self.cursor.rowcount != 0:
             return 2
         return 0
@@ -146,17 +145,54 @@ class DataBase():
         except (Exception, Error) as error:
             print("Error while searching words ", error)   
 
+    def update(self, old_pair, new_pair):
+
+        command = """
+            UPDATE words SET word1 = '{}',
+		        id_lang1 = (SELECT id FROM languages WHERE language = '{}'),
+		        word2 = '{}',
+		        id_lang2 = (SELECT id FROM languages WHERE language = '{}')
+		    WHERE (word1 = '{}' AND
+			    id_lang1 = (SELECT id FROM languages WHERE language = '{}') AND
+			    word2 = '{}' AND
+			    id_lang2 = (SELECT id FROM languages WHERE language = '{}'))
+            """
+        try:
+            self.cursor.execute(command.format(new_pair[0], new_pair[1], new_pair[2], new_pair[3], old_pair[0], old_pair[1], old_pair[2], old_pair[3]))
+            self.connection.commit()
+            return 0
+        except (Exception, Error) as error:
+            print("Error while updating words ", error)
+            return 1
+
+    def deleteWords(self, data):
+
+        command = """
+            DELETE FROM words 
+            WHERE (word1 = '{}' AND
+			    id_lang1 = (SELECT id FROM languages WHERE language = '{}') AND
+			    word2 = '{}' AND
+			    id_lang2 = (SELECT id FROM languages WHERE language = '{}'))
+        """   
+        try:
+            self.cursor.execute(command.format(data[0], data[1], data[2], data[3]))
+            self.connection.commit()
+            return 2
+        except (Exception, Error) as error:
+            print("Error while deleting words ", error)
+            return 1
+
 
     def deleteLanguage(self, language):
         delete_words_command = """
             DELETE FROM words 
             WHERE (id_lang1 = (SELECT id FROM languages WHERE (language = '{}')) OR 
                 id_lang2 = (SELECT id FROM languages WHERE (language = '{}')))
-        """    
+            """    
         delete_language_command = """
             DELETE FROM languages
             WHERE language = '{}'
-        """
+            """
         try:
             self.cursor.execute(delete_words_command.format(language, language))
             self.cursor.execute(delete_language_command.format(language))
