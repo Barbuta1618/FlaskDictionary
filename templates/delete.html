@@ -22,4 +22,10 @@
         </div>
     </form>
 
+    {% if error == 0 %}
+            <ul class="update">
+                <li style="float: left; padding: 15px 15px;">Deleted successfully</li>
+            </ul>
+    {% endif %}
+
 {% endblock %}

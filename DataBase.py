@@ -147,6 +147,9 @@ class DataBase():
 
     def update(self, old_pair, new_pair):
 
+        self.insertLanguage(new_pair[1])
+        self.insertLanguage(new_pair[3])
+        
         command = """
             UPDATE words SET word1 = '{}',
 		        id_lang1 = (SELECT id FROM languages WHERE language = '{}'),
@@ -197,5 +200,7 @@ class DataBase():
             self.cursor.execute(delete_words_command.format(language, language))
             self.cursor.execute(delete_language_command.format(language))
             self.connection.commit()
+            return 0
         except (Exception, Error) as error:
             print("Error while deleting the words or language ", error)
+            return 1

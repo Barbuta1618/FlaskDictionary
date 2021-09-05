@@ -126,7 +126,15 @@ def update():
 @app.route('/delete', methods = ['GET', 'POST'])
 def delete():
     languages = db.getLanguages()
-    return render_template('delete.html', languages = languages)
+    error = 1
+
+    if request.method == 'POST':
+        try:
+            error = db.deleteLanguage(request.form['language'])
+        except Exception as e:
+            print(e)
+
+    return render_template('delete.html', languages = languages, error = error)
 
 if __name__ == "__main__":
     app.run(debug=True)
