@@ -8,32 +8,17 @@ from dotenv import load_dotenv
 
 # env variables for database connection
 load_dotenv()
-DATABASE = os.getenv('DATABASE')
-USER = os.getenv('DB_USER')
-PASSWORD = os.getenv('PASSWORD')
-HOST = os.getenv('HOST')
-PORT = os.getenv('PORT')
-SECRET_KEY = os.getenv('SECRET_KEY')
-
-
-# returns a list with all languages
-def getLanguages():
-    with open("languages.txt", "r") as input:
-        return input.read().split("\n")
-
-languages = getLanguages()
 lastWords = []
 
 
 # database connection
-try:
-    db = DataBase.DataBase((DATABASE, USER, PASSWORD, HOST, PORT))
-except:
-    raise TypeError("Connection with database cannot be established!\nPlease make sure the .env file contains valid information!")
-
+db = DataBase.DataBase()
+languages = db.getLanguages()
 
 app = Flask(__name__)
 
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 app.config.update(
     SECRET_KEY = SECRET_KEY
 )
@@ -41,20 +26,22 @@ app.config.update(
 @app.route('/', methods = ['GET', 'POST'])
 def index():
 
+    languages = db.getLanguages()
     # GET METHOD
-    if request.method == "GET": 
-        return render_template('index.html', languages = languages, lastWords = lastWords)
-    else:
-    
-    # POST METHOD
+    if request.method == "POST":
+        # getting data from user
 
-        # getting the data from the user
-        lst = [request.form['firstWord'], request.form['firstLang'], request.form['secondWord'], request.form['secondLang']]
+        lst = ["", "", "", ""]
+        try:
+            lst = [request.form['firstWord'], request.form['firstLang'], request.form['secondWord'], request.form['secondLang']]
+        except Exception as e:
+            print(e)
+        
         
         errorCode = db.checkData(lst)
         if errorCode == 0:
-            db.insert(lst)
-            lastWords.append(lst) 
+            db.insertWords(lst)
+            lastWords.append(lst)
 
         elif errorCode == 1:
             flash('Please insert a valid word!')
@@ -64,27 +51,44 @@ def index():
             flash('The pair of words already exits!')
             return redirect(url_for('index'))
 
-        return render_template('index.html', languages = languages, lastWords = lastWords)
-
-        
+    return render_template('index.html', languages = languages, lastWords = lastWords)
 
 
 @app.route('/search', methods = ['GET', 'POST'])
 def search():
 
+    languages = db.getLanguages()
     result = ""
     # GET METHOD
-    if request.method == "GET":
-        return render_template('search.html', languages = languages, result = result)
-    else:
+    if request.method == "POST":
         lst = [request.form['word'], request.form['language1'], request.form['language2']]
         result = db.searchWord(lst)
 
         if len(result) == 0:
             flash('No results found!')
             return redirect(url_for('search'))
-        return render_template('search.html', languages = languages, result = result)
 
+    return render_template('search.html', languages = languages, result = result)
+
+
+@app.route('/dictionary', methods = ['GET', 'POST'])
+def dictionary():
+
+    languages = db.getLanguages()
+    results = list()
+    lst = ["", ""]
+    if request.method == "POST":
+        try:
+            lst = [request.form['lang1'], request.form['lang2']]
+        except Exception as e:
+            print(e)
+        results = db.getDictionary(lst)
+        if len(results) == 0:
+            flash('No results found!')
+            return redirect(url_for('dictionary'))
+        
+
+    return render_template('dictionary.html', languages = languages, result = results, language1 = lst[0], language2 = lst[1])
 
 if __name__ == "__main__":
     app.run(debug=True)

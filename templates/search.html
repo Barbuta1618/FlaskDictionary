@@ -5,28 +5,24 @@
 <div class="topnav">
     <a href="/">Insert</a>
     <a class="active" href="/search">Search</a>
+    <a href="/dictionary">Dictionary</a>
 </div>
 
 <h1 style="text-align: center;">Search Word</h1>
 
-<form action = "" method="POST">
-    <div class="Lang">
-        <select name="language1">
-            {% for item in languages %}
-                <option value="{{item}}"> {{item}} </option>
-            {% endfor %}
-        </select>
-        <input type="text" name="word">
-    </div>
-    <div>
-        <select name="language2">
-            {% for item in languages %}
-                <option value="{{item}}"> {{item}} </option>
-            {% endfor %}
-        </select>
+<form style="display: flex; justify-content: center;" action = "" method="POST">
+    <div style="flex-direction: column;">
+        <div class="Lang">
+            <p>Please select the first language: </p>
+            <input  type="text" name="language1" list="languages">
+            <p>Please select the second language: </p>
+            <input  type="text" name="language2" list="languages">
+            <p>Word in first language: </p>
+            <input type="text" name="word">
+            <input type="submit" value="Search">
+        </div>
         
     </div>
-    <input type="submit" value="Search">
 </form>
 
 <h2 style="text-align: center;">Results</h2>

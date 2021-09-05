@@ -16,6 +16,13 @@
             </ul>
         {% endif %}
     {% endwith %}
+
+    <datalist id="languages">
+        {% for item in languages %}
+            <option value="{{item.0}}">
+        {% endfor %}
+    </datalist>
+    
     {% block body %}{% endblock %}
 </body>
 </html>
