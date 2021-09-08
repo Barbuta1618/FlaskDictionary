@@ -98,6 +98,10 @@ class DataBase():
                 print("Error while inserting language ", error)
             self.connection.commit()
 
+            return 0
+        else:
+            return 1
+
 
     def insertWords(self, data):
         

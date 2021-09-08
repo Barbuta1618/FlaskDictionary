@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+    {{ topNav("", "", "", "", "", "active") }} 
+
+    <h1 style="text-align: center;">Add Language</h1>
+
+    <form style="display: flex; justify-content: center;" action = "" method="POST">
+        <div style="flex-direction: column;">
+            <div class="Lang">
+                <p>Please insert the language: </p>
+                <input  type="text" name="language">
+                <input type="submit" value="Add">
+            </div>
+        </div>
+    </form>
+
+    {% if error == 0 %}
+            <ul class="update">
+                <li style="float: left; padding: 15px 15px;">Added successfully</li>
+            </ul>
+    {% endif %}
+
+{% endblock %}

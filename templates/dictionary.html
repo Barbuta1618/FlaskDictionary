@@ -2,22 +2,15 @@
 
 {% block body %}
 
-    <div class="topnav">
-        <a href="/">Insert</a>
-        <a href="/search">Search</a>
-        <a class="active" href="/dictionary">Dictionary</a>
-        <a href="/update">Update</a>
-        <a href="/delete">Delete</a>
-    </div>
-
+    {{ topNav("", "", "active", "", "", "") }} 
     <h1 style="text-align: center;">Dictionary</h1>
 
     <form action = "" method="POST">
         <div class="Lang">
             <p>Please select the first language: </p>
-            <input type="text" name="lang1" list="languages">
+            {{ languageSelect(languages, "firstLang", "lang1", "checkLanguages()") }}
             <p>Please select the second language: </p>
-            <input type="text" name="lang2" list="languages">
+            {{ languageSelect(languages, "secondLang", "lang2", "checkLanguages()") }}
         <input type="submit" value="Submit">
     </form>
 

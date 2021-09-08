@@ -2,13 +2,8 @@
 
 {% block body %}
 
-    <div class="topnav">
-        <a href="/">Insert</a>
-        <a href="/search">Search</a>
-        <a href="/dictionary">Dictionary</a>
-        <a href="/update">Update</a>
-        <a class="active" href="/delete">Delete</a>
-    </div>
+
+    {{ topNav("", "", "", "", "active", "") }} 
 
     <h1 style="text-align: center;">Delete Language</h1>
 
@@ -16,7 +11,7 @@
         <div style="flex-direction: column;">
             <div class="Lang">
                 <p>Please select the language: </p>
-                <input  type="text" name="language" list="languages">
+                {{ languageSelect(languages, "language", "language", "") }}
                 <input type="submit" value="DELETE">
             </div>
         </div>

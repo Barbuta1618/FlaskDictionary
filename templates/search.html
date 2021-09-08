@@ -2,13 +2,7 @@
 
 {% block body %}
 
-<div class="topnav">
-    <a href="/">Insert</a>
-    <a class="active" href="/search">Search</a>
-    <a href="/dictionary">Dictionary</a>
-    <a href="/update">Update</a>
-    <a href="/delete">Delete</a>
-</div>
+{{ topNav("", "active", "", "", "", "") }} 
 
 <h1 style="text-align: center;">Search Word</h1>
 
@@ -16,9 +10,9 @@
     <div style="flex-direction: column;">
         <div class="Lang">
             <p>Please select the first language: </p>
-            <input  type="text" name="language1" list="languages">
+            {{ languageSelect(languages, "fristLang", "language1", "checkLanguages()") }}
             <p>Please select the second language: </p>
-            <input  type="text" name="language2" list="languages">
+            {{ languageSelect(languages, "secondLang", "language2", "checkLanguages()") }}
             <p>Word in first language: </p>
             <input type="text" name="word">
             <input type="submit" value="Search">

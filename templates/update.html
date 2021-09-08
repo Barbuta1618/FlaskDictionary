@@ -2,15 +2,7 @@
 
 {% block body %}
 
-<div class="topnav">
-    <a href="/">Insert</a>
-    <a href="/search">Search</a>
-    <a href="/dictionary">Dictionary</a>
-    <a class="active" href="/update">Update</a>
-    <a href="/delete">Delete</a>
-</div>
-
-
+{{ topNav("", "", "", "active", "", "") }}
 
 <form style="display: flex; justify-content: center;" action = "" method="POST">
     <div style="display: flex; flex-direction: column;">
@@ -18,36 +10,20 @@
         <div style="display: flex; flex-direction: row;">
             <div class = "Lang">
                 <p>Please insert the first language: </p>
-                <input type="text" name="firstLang" list="languages">
+                {{ languageSelect(languages, "firstLang", "firstLang", "checkLanguages()") }}
                 <p>Word in first language: </p>
-                <input type="text" name="firstWord"/>
+                <input type="text" name="firstWord" id="firstWord" onkeyup="checkWord()"/>
             </div>
             <div class = "Lang">
                 <p>Please insert the second language: </p>
-                <input type="text" name="secondLang" list="languages">
+                {{ languageSelect(languages, "secondLang", "secondLang", "checkLanguages()") }}
                 <p>Word in second language: </p>
-                <input type="text" name="secondWord"/>
+                <input type="text" name="secondWord" id="secondWord" onkeyup="checkWord()"/>
             </div>
         </div>
-        <h1 style="text-align: center;">New Values</h1>
-        <div style="display: flex; flex-direction: row;">
-            <div class = "Lang">
-                <p>Please insert the first language: </p>
-                <input type="text" name="new_firstLang" list="languages">
-                <p>Word in first language: </p>
-                <input type="text" name="new_firstWord"/>
-            </div>
-            <div class = "Lang">
-                <p>Please insert the second language: </p>
-                <input type="text" name="new_secondLang" list="languages">
-                <p>Word in second language: </p>
-                <input type="text" name="new_secondWord"/>
-            </div>
-        </div>
-        <input type="submit" value="UPDATE/DELETE">
+        <input type="submit" value="UPDATE">
     </div>
 </form>
-<p>*To delete a pair of words leave blank "New Values"</p>
 
 {% if error == 0 %}
     <ul class="update">
@@ -55,10 +31,5 @@
     </ul>
 {% endif %}
 
-{% if error == 2 %}
-    <ul class="update">
-        <li style="float: left; padding: 15px 15px;">Deleted successfully</li>
-    </ul>
-{% endif %}
 
 {% endblock %}

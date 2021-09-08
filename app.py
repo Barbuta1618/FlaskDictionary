@@ -47,7 +47,7 @@ def index():
             return redirect(url_for('index'))
 
         elif errorCode == 2:
-            flash('The pair of words already exits!')
+            flash('The pair of words already exists!')
             return redirect(url_for('index'))
 
     return render_template('index.html', languages = languages, lastWords = lastWords)
@@ -94,32 +94,6 @@ def update():
     languages = db.getLanguages()
 
     error = 1
-    if request.method == "POST":
-        try:
-            old_pair = [request.form['firstWord'], request.form['firstLang'], request.form['secondWord'], request.form['secondLang']]
-            new_pair = [request.form['new_firstWord'], request.form['new_firstLang'], request.form['new_secondWord'], request.form['new_secondLang']]
-
-            error_new_pair = db.checkData(new_pair)
-            if db.checkData(old_pair) != 2:
-                flash('The pair of words doesn t exist!')
-                return redirect(url_for('update'))
-            elif error_new_pair == 1:
-                
-                for item in new_pair:
-                    if item != '':
-                        flash('Please insert a valid word!')
-                        return redirect(url_for('update'))
-                
-                error = db.deleteWords(old_pair)
-                
-            elif error_new_pair == 2:
-                flash('The pair of words already exits!')
-                return redirect(url_for('update'))
-            else:
-                error = db.update(old_pair, new_pair)
-
-        except Exception as e:
-            print(e)
 
     return render_template('update.html', languages = languages, error = error)
 
@@ -135,6 +109,42 @@ def delete():
             print(e)
 
     return render_template('delete.html', languages = languages, error = error)
+
+@app.route('/add', methods = ['GET', 'POST'])
+def addLang():
+    languages = db.getLanguages()
+    error = 1
+    if request.method == 'POST':
+        language = request.form['language']
+        if db.insertLanguage(language) == 1:
+            flash('The language already exists!')
+            return redirect(url_for('addLang'))
+        else:
+            error = 0
+
+    return render_template('add.html', languages = languages, error = error)
+
+@app.route('/word', methods = ['GET'])
+def word():
+    word1 = request.args.get('word1')
+    word2 = request.args.get('word2')
+    lang1 = request.args.get('lang1')
+    lang2 = request.args.get('lang2')
+
+    if lang1 != "" and lang2 != "":
+        if word1 != "" and word2 == "":
+
+            pair = db.searchWord((word1, lang1, lang2))
+            if db.cursor.rowcount != 0:
+                word2 = pair[0][2]
+
+        if word2 != "" and word1 == "":
+            pair = db.searchWord((word2, lang2, lang1))
+            if db.cursor.rowcount != 0:
+                word1 = pair[0][0]
+
+    return {'word1' : word1, 'word2' : word2}
+
 
 if __name__ == "__main__":
     app.run(debug=True)

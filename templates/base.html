@@ -5,8 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA_Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="{{ url_for('static',filename='js/index.js') }}"></script>
+    {% block head %}{% endblock %}
 </head>
 <body>
+
+    {% macro languageSelect(languages, id, name, onchangefunction) -%}
+        <select id="{{id}}" name="{{name}}" onchange="{{onchangefunction}}">
+            <option disabled selected value> -- select a language -- </option>
+            {% for item in languages %}
+                <option value="{{item.0}}">{{item.0}}</option>
+            {% endfor %}
+        </select>
+    {%- endmacro %}
+
+    {% macro topNav(index, search, dictionary, update, delete, add) -%} 
+        <div class="topnav">
+            <a class="{{index}}" href="/">Insert</a>
+            <a class="{{search}} "href="/search">Search</a>
+            <a class="{{dictionary}}" href="/dictionary">Dictionary</a>
+            <a class="{{update}}" href="/update">Update</a>
+            <a class="{{delete}}" href="/delete">Delete Language</a>
+            <a class="{{add}}" href="/add">Add Language</a>
+        </div>
+    {%- endmacro %}
+
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul class=flashes>
@@ -17,11 +40,7 @@
         {% endif %}
     {% endwith %}
 
-    <datalist id="languages">
-        {% for item in languages %}
-            <option value="{{item.0}}">
-        {% endfor %}
-    </datalist>
+    
     
     {% block body %}{% endblock %}
 </body>
