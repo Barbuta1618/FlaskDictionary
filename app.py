@@ -36,6 +36,9 @@ def index():
         except Exception as e:
             print(e)
         
+        if lst[0] == lst[2]:
+            flash('The languages cannot be the same!')
+            return redirect(url_for('index'))
         
         errorCode = db.checkData(lst)
         if errorCode == 0:
@@ -61,6 +64,10 @@ def search():
     # GET METHOD
     if request.method == "POST":
         lst = [request.form['word'], request.form['language1'], request.form['language2']]
+
+        if lst[1] == lst[2]:
+            flash('The languages cannot be the same!')
+            return redirect(url_for('search'))
         result = db.searchWord(lst)
 
         if len(result) == 0:
@@ -81,6 +88,10 @@ def dictionary():
             lst = [request.form['lang1'], request.form['lang2']]
         except Exception as e:
             print(e)
+
+        if lst[1] == lst[0]:
+            flash('The languages cannot be the same!')
+            return redirect(url_for('dictionary'))
         results = db.getDictionary(lst)
         if len(results) == 0:
             flash('No results found!')
