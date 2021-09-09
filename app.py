@@ -93,7 +93,7 @@ def dictionary():
             flash('The languages cannot be the same!')
             return redirect(url_for('dictionary'))
         results = db.getDictionary(lst)
-        if len(results) == 0:
+        if db.cursor.rowcount == 0:
             flash('No results found!')
             return redirect(url_for('dictionary'))
         
@@ -165,12 +165,18 @@ def word():
 
             pair = db.searchWord((word1, lang1, lang2))
             if db.cursor.rowcount != 0:
-                word2 = pair[0][2]
+                if word1 == pair[0][2]:
+                    word2 = pair[0][0]
+                else:
+                    word2 = pair[0][2]
 
         if word2 != "" and word1 == "":
             pair = db.searchWord((word2, lang2, lang1))
             if db.cursor.rowcount != 0:
-                word1 = pair[0][0]
+                if word2 == pair[0][0]:
+                    word1 = pair[0][2]
+                else:
+                    word1 = pair[0][0]
 
     return {'word1' : word1, 'word2' : word2}
 
