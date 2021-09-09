@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request
+from flask_cors import CORS, cross_origin
 from flask.helpers import flash
 from werkzeug.utils import redirect
 import DataBase
@@ -16,6 +17,12 @@ db = DataBase.DataBase()
 languages = db.getLanguages()
 
 app = Flask(__name__)
+
+# allowing cross origin requests
+CORS(app)
+cors = CORS(app, resources={r"/update": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 app.config.update(
@@ -93,7 +100,7 @@ def dictionary():
             flash('The languages cannot be the same!')
             return redirect(url_for('dictionary'))
         results = db.getDictionary(lst)
-        if len(results) == 0:
+        if db.cursor.rowcount == 0:
             flash('No results found!')
             return redirect(url_for('dictionary'))
         
@@ -101,6 +108,7 @@ def dictionary():
 
 
 @app.route('/update', methods = ['GET', 'POST'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def update():
     languages = db.getLanguages()
     error = 1
@@ -111,12 +119,16 @@ def update():
             old_pair = [data['old_word1'], data['old_lang1'], data['old_word2'], data['old_lang2']]
             new_pair = [data['new_word1'], data['new_lang1'], data['new_word2'], data['new_lang2']]
 
+            
             error_new_pair = db.checkData(new_pair)
             if db.checkData(old_pair) == 0:
                 flash('The pair of words doesn t exist!')
                 return redirect(url_for('update'))
             elif error_new_pair == 1:
                 flash('Please insert a valid word!')
+                return redirect(url_for('update'))
+            elif error_new_pair == 2:
+                flash('The pair of words already exists!')
                 return redirect(url_for('update'))
             else:
                 error = db.update(old_pair, new_pair)
@@ -153,24 +165,34 @@ def addLang():
 
     return render_template('add.html', languages = languages, error = error)
 
-@app.route('/word', methods = ['GET'])
+@app.route('/word', methods = ['GET', 'POST'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def word():
-    word1 = request.args.get('word1')
-    word2 = request.args.get('word2')
-    lang1 = request.args.get('lang1')
-    lang2 = request.args.get('lang2')
+
+    # searching in database for update page
+    data = request.get_json()
+    word1 = data['word1']
+    word2 = data['word2']
+    lang1 = data['lang1']
+    lang2 = data['lang2']
 
     if lang1 != "" and lang2 != "":
         if word1 != "" and word2 == "":
 
             pair = db.searchWord((word1, lang1, lang2))
             if db.cursor.rowcount != 0:
-                word2 = pair[0][2]
+                if word1 == pair[0][2]:
+                    word2 = pair[0][0]
+                else:
+                    word2 = pair[0][2]
 
         if word2 != "" and word1 == "":
             pair = db.searchWord((word2, lang2, lang1))
             if db.cursor.rowcount != 0:
-                word1 = pair[0][0]
+                if word2 == pair[0][0]:
+                    word1 = pair[0][2]
+                else:
+                    word1 = pair[0][0]
 
     return {'word1' : word1, 'word2' : word2}
 

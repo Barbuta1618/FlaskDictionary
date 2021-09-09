@@ -63,6 +63,20 @@ class DataBase():
             if not all(x.isalpha() or x.isspace() for x in item):
                 return 1
 
+        lang1 = data[1]
+        lang2 = data[3]
+
+        get_lang_id_command = "SELECT id FROM languages WHERE (language = '{}')"
+        self.cursor.execute(get_lang_id_command.format(lang1))
+        id_lang1 = self.cursor.fetchone()[0]
+
+        self.cursor.execute(get_lang_id_command.format(lang2))
+        self.cursor.execute(get_lang_id_command.format(lang2))
+        id_lang2 = self.cursor.fetchone()[0]
+
+        if id_lang1 > id_lang2:
+            data = self.reverseWords(data)
+
         command = """
             SELECT * FROM {}
                 WHERE word1 = '{}' AND 
@@ -106,8 +120,19 @@ class DataBase():
     def insertWords(self, data):
         
         # checking for languages
-        self.insertLanguage(data[1])
-        self.insertLanguage(data[3])
+        lang1 = data[1]
+        lang2 = data[3]
+
+        get_lang_id_command = "SELECT id FROM languages WHERE (language = '{}')"
+        self.cursor.execute(get_lang_id_command.format(lang1))
+        id_lang1 = self.cursor.fetchone()[0]
+
+        self.cursor.execute(get_lang_id_command.format(lang2))
+        self.cursor.execute(get_lang_id_command.format(lang2))
+        id_lang2 = self.cursor.fetchone()[0]
+
+        if id_lang1 > id_lang2:
+            data = self.reverseWords(data)
 
         insert_command = """
             INSERT INTO {} VALUES ('{}', (SELECT id FROM {} WHERE (language = '{}')),
@@ -135,19 +160,50 @@ class DataBase():
         except (Exception, Error) as error:
             print("Error while searching words ", error)
         
-    def reverseWords(pair):
+    def reverseWords(self, pair):
         return (pair[2], pair[3], pair[0], pair[1])
 
+    def reverse(pair, item1, item2):
+        aux = item1
+        item1 = item2
+        item2 = aux
+
     def getDictionary(self, languages):
-        command = """
-            SELECT word1, word2 
+
+        reverse = False
+
+        lang1 = languages[0]
+        lang2 = languages[1]
+
+        get_lang_id_command = "SELECT id FROM languages WHERE (language = '{}')"
+        self.cursor.execute(get_lang_id_command.format(lang1))
+        id_lang1 = self.cursor.fetchone()[0]
+
+        self.cursor.execute(get_lang_id_command.format(lang2))
+        id_lang2 = self.cursor.fetchone()[0]
+
+        if id_lang1 > id_lang2:
+            reverse = True
+        
+        if reverse:
+            command = """
+            SELECT word2, word1
             FROM words 
-            WHERE (id_lang1 = (SELECT id FROM languages WHERE (language = '{}')) AND 
-                id_lang2 = (SELECT id FROM languages WHERE (language = '{}'))) ORDER BY word1
+            WHERE (id_lang2 = (SELECT id FROM languages WHERE (language = '{}')) AND 
+                id_lang1 = (SELECT id FROM languages WHERE (language = '{}'))) ORDER BY word2
             """
+        else:
+            command = """
+                SELECT word1, word2 
+                FROM words 
+                WHERE (id_lang1 = (SELECT id FROM languages WHERE (language = '{}')) AND 
+                    id_lang2 = (SELECT id FROM languages WHERE (language = '{}'))) ORDER BY word1
+                """
         try:
             self.cursor.execute(command.format(languages[0], languages[1]))
+
             return self.cursor.fetchall()
+
         except (Exception, Error) as error:
             print("Error while searching words ", error)   
 

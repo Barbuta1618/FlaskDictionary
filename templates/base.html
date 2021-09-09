@@ -13,7 +13,7 @@
 
     {% macro languageSelect(languages, id, name, onchangefunction) -%}
         <select id="{{id}}" name="{{name}}" onchange="{{onchangefunction}}">
-            <option disabled selected value> -- select a language -- </option>
+            <option value='1' disabled selected value> -- select a language -- </option>
             <option value='0'>Add language</option>
             {% for item in languages %}
                 <option value="{{item.0}}">{{item.0}}</option>
