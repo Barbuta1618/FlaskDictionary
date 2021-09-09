@@ -4,7 +4,7 @@
 
 {{ topNav("", "", "", "active", "", "") }}
 
-<form style="display: flex; justify-content: center;" action = "" method="POST">
+<form style="display: flex; justify-content: center;" action="">
     <div style="display: flex; flex-direction: column;">
         <h1 style="text-align: center;">Select Words</h1>
         <div style="display: flex; flex-direction: row;">
@@ -12,16 +12,16 @@
                 <p>Please insert the first language: </p>
                 {{ languageSelect(languages, "firstLang", "firstLang", "checkLanguages()") }}
                 <p>Word in first language: </p>
-                <input type="text" name="firstWord" id="firstWord" onkeyup="checkWord()"/>
+                <input type="text" name="firstWord" id="firstWord" onkeyup="checkWord()" required/>
             </div>
             <div class = "Lang">
                 <p>Please insert the second language: </p>
                 {{ languageSelect(languages, "secondLang", "secondLang", "checkLanguages()") }}
                 <p>Word in second language: </p>
-                <input type="text" name="secondWord" id="secondWord" onkeyup="checkWord()"/>
+                <input type="text" name="secondWord" id="secondWord" onkeyup="checkWord()" required/>
             </div>
         </div>
-        <input type="submit" value="UPDATE">
+        <input type="submit" id="submit" value="UPDATE" onclick="sendData()">
     </div>
 </form>
 

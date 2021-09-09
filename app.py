@@ -36,7 +36,7 @@ def index():
         except Exception as e:
             print(e)
         
-        if lst[0] == lst[2]:
+        if lst[1] == lst[3]:
             flash('The languages cannot be the same!')
             return redirect(url_for('index'))
         
@@ -103,8 +103,25 @@ def dictionary():
 @app.route('/update', methods = ['GET', 'POST'])
 def update():
     languages = db.getLanguages()
-
     error = 1
+
+    if request.method == "POST":
+        try:
+            data = request.get_json()
+            old_pair = [data['old_word1'], data['old_lang1'], data['old_word2'], data['old_lang2']]
+            new_pair = [data['new_word1'], data['new_lang1'], data['new_word2'], data['new_lang2']]
+
+            error_new_pair = db.checkData(new_pair)
+            if db.checkData(old_pair) == 0:
+                flash('The pair of words doesn t exist!')
+                return redirect(url_for('update'))
+            elif error_new_pair == 1:
+                flash('Please insert a valid word!')
+                return redirect(url_for('update'))
+            else:
+                error = db.update(old_pair, new_pair)
+        except Exception as e:
+            print(e)
 
     return render_template('update.html', languages = languages, error = error)
 
@@ -116,6 +133,7 @@ def delete():
     if request.method == 'POST':
         try:
             error = db.deleteLanguage(request.form['language'])
+            languages = db.getLanguages()
         except Exception as e:
             print(e)
 
@@ -126,7 +144,7 @@ def addLang():
     languages = db.getLanguages()
     error = 1
     if request.method == 'POST':
-        language = request.form['language']
+        language = request.form['language'].upper()
         if db.insertLanguage(language) == 1:
             flash('The language already exists!')
             return redirect(url_for('addLang'))

@@ -60,7 +60,7 @@ class DataBase():
 
     def checkData(self, data):
         for item in data:
-            if not item.isalpha():
+            if not all(x.isalpha() or x.isspace() for x in item):
                 return 1
 
         command = """
@@ -135,6 +135,8 @@ class DataBase():
         except (Exception, Error) as error:
             print("Error while searching words ", error)
         
+    def reverseWords(pair):
+        return (pair[2], pair[3], pair[0], pair[1])
 
     def getDictionary(self, languages):
         command = """

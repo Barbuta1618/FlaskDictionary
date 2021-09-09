@@ -16,16 +16,16 @@
                     <p>Please insert the first language: </p>
                     {{ languageSelect(languages, "firstLang", "firstLang", "checkLanguages()") }}
                     <p>Word in first language: </p>
-                    <input type="text" name="firstWord"/>
+                    <input type="text" name="firstWord" required/>
                 </div>
                 <div class = "Lang">
                     <p>Please insert the second language: </p>
                     {{ languageSelect(languages, "secondLang", "secondLang", "checkLanguages()") }}
                     <p>Word in second language: </p>
-                    <input type="text" name="secondWord"/>
+                    <input type="text" name="secondWord" required/>
                 </div>
             </div>
-            <input type="submit" value="submit">
+            <input type="submit" id="submit" value="submit">
         </div>
     </form>
 
