@@ -25,23 +25,26 @@ async function checkWord(){
                 })
             });
             const data = await rawResponse.json();
-          
-            last_data = {
-                lang1: lang1,
-                lang2: lang2,
-                word1: data.word1,
-                word2: data.word2
-            }
+            
+            if(last_data == null || (last_data.word1 != data.word1 && last_data.word2 != data.word2)){
+                last_data = {
+                    lang1: lang1,
+                    lang2: lang2,
+                    word1: data.word1,
+                    word2: data.word2
+                }
 
-            if(word1 == "" && word2 != ""){
-                document.getElementById('firstWord').value = data.word1;
-            }else{
-                if(word2 == "" && word1 != ""){
-                    document.getElementById('secondWord').value = data.word2;
+                if(word1 == "" && word2 != ""){
+                    document.getElementById('firstWord').value = data.word1;
+                }else{
+                    if(word2 == "" && word1 != ""){
+                        document.getElementById('secondWord').value = data.word2;
+                    }
                 }
             }
         })();
     }
+
 }
 
 function sendData(){
