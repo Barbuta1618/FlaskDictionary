@@ -31,5 +31,26 @@
     </ul>
 {% endif %}
 
+<script>
+
+    function getParams(){
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const data = Object.fromEntries(urlSearchParams.entries());
+
+        if(data.word1 != null && data.word2 != null && data.lang1 != null && data.lang2 != null){
+        
+            document.getElementById('firstWord').value = data.word1;
+            document.getElementById('firstLang').value = data.lang1;
+            document.getElementById('secondWord').value = data.word2;
+            document.getElementById('secondLang').value = data.lang2;
+            
+            checkLanguages();
+
+            last_data = data;
+        }
+    }
+
+    getParams();
+</script>
 
 {% endblock %}

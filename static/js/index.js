@@ -2,6 +2,15 @@
 var URL_API = "http://localhost:5000/word";
 var last_data = null
 
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+}
+
 async function checkWord(){
     
     var lang1 = document.getElementById('firstLang').value;
@@ -44,8 +53,8 @@ async function checkWord(){
             }
         })();
     }
-
 }
+
 
 function sendData(){
 
@@ -93,13 +102,13 @@ function checkLanguages() {
     var lang1 = lang1Input.value;
     var lang2 = lang2Input.value;
 
-    if(lang1 == '1' || lang2 == '1'){
-        document.getElementById('submit').disabled = true;
+    if(lang1 == '0' || lang2 == '0'){
+        window.location.replace('/add')
         return;
     }
 
-    if(lang1 == '0' || lang2 == '0'){
-        window.location.replace('/add')
+    if(lang1 == '1' || lang2 == '1'){
+        document.getElementById('submit').disabled = true;
         return;
     }
 

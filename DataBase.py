@@ -119,7 +119,7 @@ class DataBase():
 
     def insertWords(self, data):
         
-        # checking for languages
+        # checking for languages id order
         lang1 = data[1]
         lang2 = data[3]
 
@@ -231,6 +231,21 @@ class DataBase():
             return 1
 
     def deleteWords(self, data):
+
+        # checking for languages id order
+        lang1 = data[1]
+        lang2 = data[3]
+
+        get_lang_id_command = "SELECT id FROM languages WHERE (language = '{}')"
+        self.cursor.execute(get_lang_id_command.format(lang1))
+        id_lang1 = self.cursor.fetchone()[0]
+
+        self.cursor.execute(get_lang_id_command.format(lang2))
+        self.cursor.execute(get_lang_id_command.format(lang2))
+        id_lang2 = self.cursor.fetchone()[0]
+
+        if id_lang1 > id_lang2:
+            data = self.reverseWords(data)
 
         command = """
             DELETE FROM words 

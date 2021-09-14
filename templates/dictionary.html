@@ -1,5 +1,47 @@
 {% extends "base.html" %}
 
+{% block head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script> 
+    function update(element){
+        let str = element.value;
+        const data = str.split("#")
+
+        var URL_UPDATE = '/update'
+        URL_UPDATE = URL_UPDATE + '?word1=' + data[0] + '&word2=' + data[1]
+            + '&lang1=' + data[2] + '&lang2=' + data[3];
+
+        window.location.replace(URL_UPDATE)
+    }
+
+    function deletePair(element){
+        let str = element.value;
+        const data = str.split('#');
+
+        $.ajax({
+            url: '/deleteWords',
+            type: "POST",
+            contentType: 'application/json',
+            crossDomain: true,
+            data: JSON.stringify({
+                word1: data[0],
+                word2: data[1],
+                lang1: data[2],
+                lang2: data[3]
+            }),
+
+            success: function (data) {
+                if (data.success){
+                    
+                }
+            }
+        });
+
+    }
+
+</script>
+{% endblock %}
+
 {% block body %}
 
     {{ topNav("", "", "active", "", "", "") }} 
@@ -14,13 +56,13 @@
         <input type="submit" id='submit' value="Submit" disabled>
     </form>
 
-    <div style="display: flex; flex-direction: row;">
-        <div style="display: flex; flex-direction: column">
-            <h4>From {{language1}} to {{language2}}: </h4>
-            {% for item in result %}
-                <p>{{item.0}} = {{item.1}}</p>
-            {% endfor %}
+    <h4>From {{language1}} to {{language2}}: </h4>
+    {% for item in result %}
+        <div class="dictionaryCell">
+            <p>{{item.0}} = {{item.1}}</p>
+            <button value="{{item.0}}#{{item.1}}#{{language1}}#{{language2}}" class="btn" type="button" onclick="deletePair(this)"><i class="fa fa-trash"></i></button>
+            <button value="{{item.0}}#{{item.1}}#{{language1}}#{{language2}}" class="btn" onclick="update(this)" type="button"><i class="fa fa-bars"></i></button>
         </div>
-    </div>
+    {% endfor %}
 
 {% endblock %}

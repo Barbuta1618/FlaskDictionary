@@ -3,6 +3,7 @@ from flask_cors import CORS, cross_origin
 from flask.helpers import flash
 from werkzeug.utils import redirect
 import DataBase
+import json
 import os
 from dotenv import load_dotenv
 
@@ -132,6 +133,7 @@ def update():
                 return redirect(url_for('update'))
             else:
                 error = db.update(old_pair, new_pair)
+                return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
         except Exception as e:
             print(e)
 
@@ -150,6 +152,17 @@ def delete():
             print(e)
 
     return render_template('delete.html', languages = languages, error = error)
+
+@app.route('/deleteWords', methods = ['POST'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+def deleteWords():
+    data = request.get_json()
+    pair = [data['word1'], data['lang1'], data['word2'], data['lang2']]
+
+    db.deleteWords(pair)
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
+    
 
 @app.route('/add', methods = ['GET', 'POST'])
 def addLang():
