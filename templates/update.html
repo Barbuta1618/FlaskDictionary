@@ -4,7 +4,7 @@
 
 {{ topNav("", "", "", "active", "", "") }}
 
-<form style="display: flex; justify-content: center;" action="">
+<div style="display: flex; justify-content: center;">
     <div style="display: flex; flex-direction: column;">
         <h1 style="text-align: center;">Select Words</h1>
         <div style="display: flex; flex-direction: row;">
@@ -23,7 +23,7 @@
         </div>
         <input type="submit" id="submit" value="UPDATE" onclick="sendData()" disabled>
     </div>
-</form>
+</div>
 
 {% if error == 0 %}
     <ul class="update">

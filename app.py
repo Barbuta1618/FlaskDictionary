@@ -1,8 +1,9 @@
 from flask import Flask, render_template, url_for, request
 from flask_cors import CORS, cross_origin
-from flask.helpers import flash
+from flask.helpers import flash, make_response
 from werkzeug.utils import redirect
 import DataBase
+import my_pdf
 import json
 import os
 from dotenv import load_dotenv
@@ -133,7 +134,7 @@ def update():
                 return redirect(url_for('update'))
             else:
                 error = db.update(old_pair, new_pair)
-                return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
+                return json.dumps({'success':True})
         except Exception as e:
             print(e)
 
@@ -208,6 +209,27 @@ def word():
                     word1 = pair[0][0]
 
     return {'word1' : word1, 'word2' : word2}
+
+@app.route('/getPdf', methods = ['GET', 'POST'])
+def getPdf():
+
+    languages = [request.form['a'], request.form['b']]
+    title = "From {} to {}".format(languages[0], languages[1])
+
+    pdf = my_pdf.myPdf()
+    pdf.set_title(title)
+    pdf.add_title(title)
+    results = db.getDictionary(languages)
+    for item in results:
+        pdf.add_words(item)
+
+    response = make_response(pdf.output(dest='S').encode('latin-1'))
+    response.headers.set('Content-Disposition', 'attachment', filename=title + '.pdf')
+    response.headers.set('Content-Type', 'application/pdf')
+
+    return response
+
+
 
 
 if __name__ == "__main__":

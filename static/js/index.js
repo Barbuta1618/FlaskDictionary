@@ -56,7 +56,7 @@ async function checkWord(){
 }
 
 
-function sendData(){
+async function sendData(){
 
     var lang1 = document.getElementById('firstLang').value;
     var lang2 = document.getElementById('secondLang').value;
@@ -71,7 +71,7 @@ function sendData(){
             lang2: ""
         }
     }
-    $.ajax({
+    await $.ajax({
         url: '/update',
         type: "POST",
         contentType: 'application/json',
@@ -89,10 +89,12 @@ function sendData(){
 
         success: function (data) {
             if (data.success){
-                location.reload()
+                
             }
         }
     });
+    
+    location.reload()
 }
 
 function checkLanguages() {
